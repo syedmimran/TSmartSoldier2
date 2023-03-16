@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5465EC8C-C3C0-9631-AD7F-14FA439AC19A}</ProjectGuid>
+    <ProjectName>TSmartSoldier2</ProjectName>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release2|x64">
+      <Configuration>Release2</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <PlatformToolset>v143</PlatformToolset>
+    <ConfigurationType>Application</ConfigurationType>
+    <OutDir>$(ProjectDir)../bin/</OutDir>
+    <TargetName>$(ProjectName)_x64d</TargetName>
+    <LocalDebuggerEnvironment>PATH=$(ProjectDir)../bin/x64;$(ProjectDir)../bin/;%PATH%</LocalDebuggerEnvironment>
+    <LocalDebuggerCommandArguments>-data_path ../ -console_command "world_load \"VRIK_simbat\""</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <PlatformToolset>v143</PlatformToolset>
+    <ConfigurationType>Application</ConfigurationType>
+    <OutDir>$(ProjectDir)../bin/</OutDir>
+    <TargetName>$(ProjectName)_x64</TargetName>
+    <LocalDebuggerEnvironment>PATH=$(ProjectDir)../bin/x64;$(ProjectDir)../bin/;%PATH%</LocalDebuggerEnvironment>
+    <LocalDebuggerCommandArguments>-data_path ../ -console_command "world_load \"VRIK_simbat\""</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release2|x64'" Label="Configuration">
+    <PlatformToolset>v143</PlatformToolset>
+    <ConfigurationType>Application</ConfigurationType>
+    <OutDir>$(ProjectDir)../bin/</OutDir>
+    <TargetName>$(ProjectName)_x64</TargetName>
+    <LocalDebuggerEnvironment>PATH=$(ProjectDir)../bin/x64;$(ProjectDir)../bin/;%PATH%</LocalDebuggerEnvironment>
+    <LocalDebuggerCommandArguments>-data_path ../ -console_command "world_load \"VRIK_simbat\""</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>\UNIGINE Projects\TSmartSoldier 2\source\Weapons;\UNIGINE Projects\TSmartSoldier 2\source\Interfaces;\UNIGINE Projects\TSmartSoldier 2\source\TSMSoldier;\UNIGINE Projects\TSmartSoldier 2\source\Managers;\UNIGINE Projects\TSmartSoldier 2\source\TSmartSoldier;\UNIGINE Projects\TSmartSoldier 2\source\Utilities;\UNIGINE Projects\AIAvatar 1\source\Avatar;C:\NatNetSDK\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\NatNetSDK\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>D:\Unigine Projects\TSmartSoldier 2\source\Managers;D:\Unigine Projects\TSmartSoldier 2\source\TSMSoldier;D:\Unigine Projects\TSmartSoldier 2\source\Interfaces;D:\Unigine Projects\TSmartSoldier 2\source\Weapons;D:\Unigine Projects\TSmartSoldier 2\source\Utilities;D:\UNIGINE Projects\AIAvatar 1\source\TAvatar;D:\UNIGINE Projects\AIAvatar 1\source\Utilities;D:\UNIGINE Projects\AIAvatar 1\source\Avatar;C:\NatNetSDK\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\NatNetSDK\lib\x64;D:\NatNetSDK\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release2|x64'">
+    <IncludePath>D:\UNIGINE Projects\VRIK_simbat15\source;C:\NatNetSDK\include;D:\NatNetSDK\include;D:\UNIGINE Projects\VRIK_simbat\source;C:\UNIGINE Projects\VRIK_simbat\source;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\NatNetSDK\lib\x64;D:\NatNetSDK\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../include;C:\Users\USER\Downloads\eigen-3.4.0\eigen-3.4.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>DEBUG;UNIGINE_DOUBLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX64</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../lib;C:\NatNetSDK\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Unigine_double_x64d.lib;NatNetLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Full</Optimization>
+      <AdditionalIncludeDirectories>../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>NDEBUG;UNIGINE_DOUBLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX64</TargetMachine>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Unigine_double_x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release2|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Full</Optimization>
+      <AdditionalIncludeDirectories>../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>UNIGINE_DOUBLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX64</TargetMachine>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Unigine_double_x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AppEditorLogic.cpp" />
+    <ClCompile Include="AppSystemLogic.cpp" />
+    <ClCompile Include="AppWorldLogic.cpp" />
+    <ClCompile Include="C:\Sqlite\sqlite3.c" />
+    <ClCompile Include="Interfaces\SynckerInterface.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Managers\TCreateManager.cpp" />
+    <ClCompile Include="Managers\TPlayerManager.cpp" />
+    <ClCompile Include="Managers\TPlayerManagerHuman.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldier1.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldier2.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldier3.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldier4.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldier5.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldier6.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldierFingers.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldierPFCrouching.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldierData.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldierPFDying.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldierInit.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldierPFProning.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldierShooting.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldierPFStanding1.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldierPFStanding2.cpp" />
+    <ClCompile Include="Utilities\IK_Sqlite.cpp" />
+    <ClCompile Include="Utilities\Joystick.cpp" />
+    <ClCompile Include="Utilities\Utils.cpp" />
+    <ClCompile Include="Weapons\RifleM4A1.cpp" />
+    <ClCompile Include="Weapons\RifleM4A2.cpp" />
+    <ClCompile Include="Weapons\TEffects.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AppEditorLogic.h" />
+    <ClInclude Include="AppSystemLogic.h" />
+    <ClInclude Include="AppWorldLogic.h" />
+    <ClInclude Include="C:\Sqlite\sqlite3.h" />
+    <ClInclude Include="Interfaces\SynckerInterface.h" />
+    <ClInclude Include="Managers\TCreateManager.h" />
+    <ClInclude Include="Managers\TPlayerManager.h" />
+    <ClInclude Include="TSMSoldier\TSMSoldier.h" />
+    <ClInclude Include="Utilities\IK_Sqlite.h" />
+    <ClInclude Include="Utilities\Joystick.h" />
+    <ClInclude Include="Utilities\TCommon.h" />
+    <ClInclude Include="Utilities\Utils.h" />
+    <ClInclude Include="Weapons\RifleM4A1.h" />
+    <ClInclude Include="Weapons\RifleM4A2.h" />
+    <ClInclude Include="Weapons\TEffects.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="../utils/natvis/unigine_stl.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TSMSoldier\Help.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

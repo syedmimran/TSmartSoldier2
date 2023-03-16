@@ -1,0 +1,22 @@
+	void changeProfile(int newProfile);
+	void changeProfile(int newProfile, float speed);
+	void setMovingSpeed(float speed);
+	void setMoveStatus(bool on);
+	void changeAction(int newAction);
+	void setTargetPos(Vec3 pos); 
+	void setRetreatPoint(Vec3 pt);
+	void setWeaponAimming(bool on);
+	void setTurnRate(float rate);
+	void setAlertSpine(bool on, float speed);
+	void setAlertHead(bool on, float speed);
+	void setFindEnemy(bool on);
+	void setFindPath(bool on);
+	void setAvoidObstacle(bool on);
+	void setAttackSeparation(float value);
+	void setNumOfMagazines(int num);
+	void setMagazineCapacity(int num);
+	void showMarker(Vec3 pos, int id);
+	void disposeMe();
+
+
+

@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Natvis Include="../utils/natvis/unigine_stl.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AppEditorLogic.cpp" />
+    <ClCompile Include="AppSystemLogic.cpp" />
+    <ClCompile Include="AppWorldLogic.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Utilities\Joystick.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\IK_Sqlite.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Sqlite\sqlite3.c">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldier1.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldier2.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldier3.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldier4.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldier5.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldier6.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldierInit.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldierShooting.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldierPFStanding1.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\TPlayerManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\TPlayerManagerHuman.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Interfaces\SynckerInterface.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\TCreateManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Utils.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldierPFCrouching.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldierPFDying.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldierPFProning.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldierData.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapons\RifleM4A2.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapons\TEffects.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapons\RifleM4A1.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldierPFStanding2.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldierFingers.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AppEditorLogic.h" />
+    <ClInclude Include="AppSystemLogic.h" />
+    <ClInclude Include="AppWorldLogic.h" />
+    <ClInclude Include="Utilities\TCommon.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Joystick.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\IK_Sqlite.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Sqlite\sqlite3.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="TSMSoldier\TSMSoldier.h">
+      <Filter>TSMSoldier</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\TPlayerManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\SynckerInterface.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\TCreateManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Utils.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapons\RifleM4A2.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapons\TEffects.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapons\RifleM4A1.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{61688afb-f6ff-4457-a07d-9f3a1bdc25b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TSMSoldier">
+      <UniqueIdentifier>{b4973465-5ac2-43bb-b1fa-261a82e7706c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers">
+      <UniqueIdentifier>{fd9dc02b-b243-4670-8627-478d4b09f826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{a1b5b627-840a-48b8-8fb1-d29ee741f121}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapons">
+      <UniqueIdentifier>{17986fc3-d680-4245-86b4-765af09c77d1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TSMSoldier\Help.txt">
+      <Filter>TSMSoldier</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
