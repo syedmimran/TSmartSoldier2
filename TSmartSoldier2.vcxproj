@@ -48,7 +48,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\UNIGINE Projects\TSmartSoldier 2\source\Weapons;D:\UNIGINE Projects\TSmartSoldier 2\source\Interfaces;D:\UNIGINE Projects\TSmartSoldier 2\source\TSMSoldier;D:\UNIGINE Projects\TSmartSoldier 2\source\Managers;D:\UNIGINE Projects\TSmartSoldier 2\source\TSmartSoldier;D:\UNIGINE Projects\TSmartSoldier 2\source\Utilities;C:\NatNetSDK\include;$(IncludePath)</IncludePath>
+    <IncludePath>\UNIGINE Projects\TSmartSoldier 2\source\Weapons;\UNIGINE Projects\TSmartSoldier 2\source\Interfaces;\UNIGINE Projects\TSmartSoldier 2\source\TSMSoldier;\UNIGINE Projects\TSmartSoldier 2\source\Managers;\UNIGINE Projects\TSmartSoldier 2\source\TSmartSoldier;\UNIGINE Projects\TSmartSoldier 2\source\Utilities;C:\NatNetSDK\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\NatNetSDK\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
