@@ -32,7 +32,6 @@ void TCreateManager::init() {
 void TCreateManager::shutdown() {
 }
 
-bool dropDone = false;
 void TCreateManager::update() {
 	moveMarker();
 	if (getIntersection())
@@ -40,11 +39,10 @@ void TCreateManager::update() {
 	OffloadPassenger();
 	if (!dropDone) {
 		TPlayerManager::get()->createSoldierPatrol(1, SM_BLACK_SOLDIER, 0, 0, Vec3(-1.0, 3.0, 0.0), nullptr, nullptr);
+		TPlayerManager::get()->createSoldierPatrol(1, SM_BLACK_SOLDIER, 8, 0, Vec3(1.0, 3.0, 0.0), nullptr, nullptr);
 		dropDone = true;
 	}
-
-
-
+	getKeyDown();
 }
 
 void TCreateManager::OffloadPassenger() {
@@ -52,7 +50,7 @@ void TCreateManager::OffloadPassenger() {
 	if (offloadPassenger) {
 		offload_timer += Game::getIFps();
 		if (offload_timer > 1.0) {
-			Vec3 pos = Vec3(0.0, 0.0, 0.0);
+			Vec3 pos = Vec3(0.0, -110.0, 0.0);
 			setOffLoadPassengers(humanType, SM_BLACK_SOLDIER, pos, passangerCount);
 			offload_timer -= 1.0 + (rand() % 10) * 0.25;
 			passangerCount++;
@@ -163,18 +161,23 @@ void TCreateManager::placeObject() {
 		TPlayerManager::get()->createSoldierPatrol(0, SM_BLACK_SOLDIER, 9, 0, DropPos, nullptr, nullptr);*/
 		TPlayerManager::get()->createSoldierPatrol(2, SM_BLACK_SOLDIER, 0, 0, DropPos, nullptr, nullptr);
 	}
+}
+
+void TCreateManager::getKeyDown() {
 
 	if (Input::isKeyDown(Input::KEY_F4)) {
 		num_of_Attack_persons = 7;
-		attackSeparation = 2;
+		attackSeparation = 3;
 		offloadPassenger = true;
 	}
 
-	if (Input::isKeyPressed(Input::KEY_F10)) {
+	if (Input::isKeyDown(Input::KEY_F10)) {
 		TPlayerManager::get()->deleteAllSoldiers();
-		TPlayerManager::get()->clearAll();
 	}
-	
+	if (Input::isKeyDown(Input::KEY_F11)) {
+		dropDone = false;
+	}
+
 }
 
 

@@ -9,16 +9,15 @@ void TSMSoldier::updateMovement() {
 	setSinWaves();
 	updateMovingSpeed();
 	updateFingerAngles();
-	resetBones();
 	updateBones();
 }
 
 void TSMSoldier::updateFingerAngles() {
 	bool done1 = GetToValue(cLeftFingerAngle, mLeftFingerAngle, Game::getIFps()*10);
 	bool done2 = GetToValue(cRightFingerAngle, mRightFingerAngle, Game::getIFps()*10);
-	fingerTotalIndex = 30;
+	numOfFingerBonesIncluded = 30;
 	if (done1 && done2)
-		fingerTotalIndex = 0;
+		numOfFingerBonesIncluded = 0;
 }
 
 void TSMSoldier::updateMovingSpeed() {
@@ -90,18 +89,28 @@ void TSMSoldier::updatePosition() {
 	node->setWorldPosition(vpos);
 	mCurWorldPos = node->getWorldPosition();
 	turnXTo_G();
+	if (Input::isKeyPressed(Input::KEY_Y)) {
+		node->setWorldRotation(quat(0.0, 0.0, 180));
+		return;
+	}
+	if (Input::isKeyPressed(Input::KEY_U)) {
+		node->setWorldRotation(quat(0.0, 0.0,  0));
+		return;
+	}
+	if (Input::isKeyPressed(Input::KEY_I)) {
+		node->setWorldRotation(quat(0.0, 0.0, 90));
+		return;
+	}
+
+
 	mCurWorldRot = node->getWorldRotation();
 	mCurLocalPos = node->getPosition();
 	mCurLocalRot = node->getRotation();
 	//setTargetPos(Game::getPlayer()->getWorldPosition());
-
-
 }
 
 
 void TSMSoldier::setSinWaves() {
-	//if (fabs(mMovingSpeed) < 0.0005)
-	//	sinValue = 0.0;
 	switch (mProfile) {
 	case PF_TPOSE:
 		break;
@@ -110,7 +119,7 @@ void TSMSoldier::setSinWaves() {
 		generateSinWavesStanding1();
 		break;
 	case PF_STANDING2:
-		generateSinWavesStanding2();
+		generateSinWavesStanding1();
 		break;
 
 	case PF_CROUCHING:
@@ -160,38 +169,8 @@ void TSMSoldier::setAlerts() {
 }
 
 
-//-------------------------------------------------------------------------------
-void TSMSoldier::resetBones() {
-	mat4 transform;
-	for (int i = 0; i < SWAT_NumOfActiveBones + fingerTotalIndex; i++) {
-		composeTransform(transform, newInitPosBone[BoneId[i]], initQuat[BoneId[i]], initScale[BoneId[i]]);
-		mAvatar->setBoneTransformWithChildren(BoneId[i], transform);
-		if (mAvatarHead)
-			mAvatarHead->setBoneTransformWithChildren(BoneId[i], transform);
 
-	}
-}
-//-----------------------------------------------------------------------------
-void  TSMSoldier::updateBones()  {
-	for (int i = SWAT_NumOfActiveBones - 1 + fingerTotalIndex; i >= 0; i--) {
-		setBoneRotation(mAvatar, BoneId[i]);
-		if (mAvatarHead)
-			setBoneRotation(mAvatarHead, BoneId[i]);
-	}
-}
-
-//-------------------------------------------------------------------------------
-quat TSMSoldier::OptitrackToBoneRot(quat rot) {
-	quat q;
-	q.x = rot.x;
-	q.y = rot.y;
-	q.z = rot.z;
-	q.w = rot.w;
-	return q;
-}
-
-void TSMSoldier::Animate(ObjectMeshSkinnedPtr& skin, int bone_num) {
-	//mProfile = PF_PRONNING;
+void TSMSoldier::updateAnimation(int bone_num) {
 	switch (mProfile) {
 	case PF_TPOSE:
 		resetBones();
@@ -225,14 +204,11 @@ void TSMSoldier::Animate(ObjectMeshSkinnedPtr& skin, int bone_num) {
 	setSpineRotation(bone_num);
 	setHeadRotation(bone_num);
 	setFingers(bone_num);
-
-	currRot = initQuat[bone_num] * tRot;// OptitrackToBoneRot(tRot);
-	mCurWorldPos = (Vec3)tPos;
 }
 
 
 void TSMSoldier::setSpineRotation(int bone_num) {
-	if (bone_num != SWAT_Spine2)
+	if (bone_num != SMS_Spine2)
 		return;
 	tRot = tRot * spineRot;
 
@@ -240,29 +216,9 @@ void TSMSoldier::setSpineRotation(int bone_num) {
 
 
 void TSMSoldier::setHeadRotation(int bone_num) {
-	if (bone_num != SWAT_Head)
+	if (bone_num != SMS_Head)
 		return;
 	tRot = tRot * headRot;
-}
-
-
-//-------------------------------------------------------------------------
-void TSMSoldier::setBoneRotation(ObjectMeshSkinnedPtr& skin, int bone_num) {
-	currRot = initQuat[bone_num] * BoneRot[bone_num];// OptitrackToBoneRot(BoneRot[bone_num]);
-	tRot = quat_identity;
-
-	Animate(skin, bone_num);
-	mat4 transform;
-
-	if (Input::isKeyPressed(Input::KEY_T))
-		composeTransform(transform, initPosBone[bone_num], currRot, initScale[bone_num]);
-	else {
-		composeTransform(transform, newInitPosBone[bone_num] + (vec3)mCurWorldPos, currRot, initScale[bone_num]);
-		skin->setBoneTransformWithChildren(bone_num, transform);
-	}
-
-	if (bone_num == SWAT_Hips)
-		boneHeight = skin->getBoneWorldTransform(bone_num).getColumn3(3).z;
 }
 
 
@@ -337,7 +293,6 @@ void TSMSoldier::setReload(int profile, bool reload) {
 
 
 void TSMSoldier::setReload2(int profile, bool reload2) {
-	//float rate = 0.01;
 	float ifps = Game::getIFps() * 5;
 	if (reload2) {
 		for (int i = ROT_L_ARM; i <= ROT_L_HAND; i++) {
@@ -365,22 +320,6 @@ void TSMSoldier::setReload2(int profile, bool reload2) {
 	Reload2InTransition = !inReload2On && !inReload2Off;
 	for (int i = ROT_L_ARM; i <= ROT_L_HAND; i++)
 		jointRot[i][profile][RELOAD2] = quat(jointRot1[i][profile][RELOAD2].x, jointRot1[i][profile][RELOAD2].y, jointRot1[i][profile][RELOAD2].z);
-}
-
-
-void TSMSoldier::initEyePoint() {
-	if (!mAvatar)
-		return;
-
-	NodePtr childNode;
-	int index = mAvatar->findChild("headTransform");
-	if (index == -1)
-		return;
-	childNode = mAvatar->getChild(index);
-	index = childNode->findChild("eyePoint");
-	if (index == -1)
-		return;
-	eyePoint = childNode->getChild(index);
 }
 
 

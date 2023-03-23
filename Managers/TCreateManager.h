@@ -39,6 +39,7 @@ private:
 	int startCounter = 0;
 	Vec3 cameraPos, cam_trajectory;
 	Vec3 DropPos;
+	bool dropDone = false;
 	float moveSpeed2 = 0.005;
 	bool isSyncker = false;
 	bool MousePressed = false;
@@ -53,7 +54,7 @@ private:
 	bool getIntersection();
 	void OffloadPassenger();
 	void setOffLoadPassengers(int humantype, int group_type, Vec3 attackPos, int attack_id);
-
+	void getKeyDown();
 
 };
 

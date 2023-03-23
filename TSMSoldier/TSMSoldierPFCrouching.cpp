@@ -3,19 +3,21 @@
 
 
 void TSMSoldier::generateSinWavesCrouching() {
-	sinValue += Math::pow(fabs(mMovingSpeed), 0.55) * 5.0 * Game::getIFps();
+	if (!mFreeze)
+		sinValue += Math::pow(fabs(mMovingSpeed), 0.55) * speedVariation * 1.5 * Game::getIFps();
 	s_05 = Math::sin(sinValue * 0.5);
 	s_1 = Math::sin(sinValue);
 	s_2 = Math::sin(sinValue * 2);
 	sp_1 = Math::sin(sinValue + Consts::PI / 2.0);
 	float mv = fabs(mMovingSpeed / 500.0);
 	x10 = Math::pow(mv, 0.10f);
-	x15 = Math::pow(mv, 0.15f);
-	x25 = Math::pow(mv, 0.25f);
-	x45 = Math::pow(mv, 0.45f);
+	x20 = Math::pow(mv, 0.20f);
+	x30 = Math::pow(mv, 0.30f);
+	x40 = Math::pow(mv, 0.40f);
+	x50 = Math::pow(mv, 0.50f);
 	x75 = Math::pow(mv, 0.75f);
-	x125 = Math::pow(fabs(mMovingSpeed), 1.25);
-	stepAngle = s_1 * x25 * 30;
+	x125 = Math::pow(mv, 1.25f);
+	stepAngle = s_1 * x20 * 30;
 	forwardMove = mMovingSpeed * 2;
 	clampValue(forwardMove, -1.0, 1.0);
 	mLeftFingerAngle = 50 - fabs(mMovingSpeed) * 15;
@@ -25,7 +27,6 @@ void TSMSoldier::generateSinWavesCrouching() {
 
 void TSMSoldier::setProfileCrouching(int profile, int bone_num) {
 	quat q = quat_identity;
-	vec3 p = vec3_zero;
 	float k = 0.0;
 	float k1 = 0.0;
 	float zz1 = 0.0;
@@ -40,112 +41,103 @@ void TSMSoldier::setProfileCrouching(int profile, int bone_num) {
 	setUp(boneRot[bone_num].y, boneRot2[profile][bone_num].y, ifps * fabs(boneRot2[profile][bone_num].y - boneRot2[mPrevProfile][bone_num].y));
 	setUp(boneRot[bone_num].z, boneRot2[profile][bone_num].z, ifps * fabs(boneRot2[profile][bone_num].z - boneRot2[mPrevProfile][bone_num].z));
 	switch (bone_num) {
-	case SWAT_Hips:
+	case SMS_Hips:
 		setUp(boneRot[bone_num].z, boneRot2[profile][bone_num].z, ifps * fabs(boneRot2[profile][bone_num].z - boneRot2[mPrevProfile][bone_num].z));
-		k = fabsMovingSpeed * x25;
+		k = fabsMovingSpeed * x30;
 		if (k > 0.35)
 			k = 0.35;
-		p = node->getWorldRotation() * vec3(s_2 * 0.025 * x15, s_2 * 0.05 * x15, boneRot[bone_num].z + s_2 * x15 * 0.05 + k);
+		tPos = vec3(s_2 * 0.025 * x20, s_2 * 0.05 * x20, boneRot[bone_num].z + s_2 * x20 * 0.05 + k);
 		q = quat(boneRot[bone_num].x - tMovingSpeed * 1.5, 0.0, -stepAngle * 1.0);
 		break;
 
-	case SWAT_Spine:
+	case SMS_Spine:
 		nodAngle = 5 + tMovingSpeed * 5;
 		q = quat(boneRot[bone_num].x - nodAngle, stepAngle * fabs(tMovingSpeed) * 0.5, stepAngle * 0.50);
 		break;
 
-	case SWAT_Spine2:
-		q = quat(boneRot[bone_num].x - s_2 * x45 * 2, -stepAngle * fabs(tMovingSpeed) * 0.25, stepAngle * fabs(tMovingSpeed) * 0.25);
+	case SMS_Spine2:
+		q = quat(boneRot[bone_num].x - s_2 * x50 * 2, -stepAngle * fabs(tMovingSpeed) * 0.25, stepAngle * fabs(tMovingSpeed) * 0.25);
 		break;
 
-	case SWAT_Neck:
-		q = quat(boneRot[bone_num].x - s_2 * x45 * 20, stepAngle * fabs(tMovingSpeed) * 0.25, 0.0);
+	case SMS_Neck:
+		q = quat(boneRot[bone_num].x - s_2 * x50 * 20, stepAngle * fabs(tMovingSpeed) * 0.25, 0.0);
 		break;
 
-	case SWAT_LeftHip:
-		if (fabs(tMovingSpeed) > 0.001)
-			boneRot[bone_num] = boneRot2[PF_CROUCHING][bone_num];
-		q = quat(boneRot[bone_num].x + stepAngle * x45 * 25.0 + 100 * fabsMovingSpeed * x25, boneRot[bone_num].y, boneRot[bone_num].z + stepAngle * 1.0);
+	case SMS_LeftHip:
+		q = quat(boneRot[bone_num].x + stepAngle * x50 * 25.0 + 100 * fabsMovingSpeed * x30, boneRot[bone_num].y, boneRot[bone_num].z + stepAngle * 1.0);
 		break;
 
-	case SWAT_RightHip:
-		if (fabs(tMovingSpeed) > 0.001)
-			boneRot[bone_num] = boneRot2[PF_CROUCHING][bone_num];
-		q = quat(boneRot[bone_num].x - stepAngle * x45 * 25.0 - 50 * fabsMovingSpeed * x25, boneRot[bone_num].y, boneRot[bone_num].z + stepAngle * 1.0);
+	case SMS_RightHip:
+		q = quat(boneRot[bone_num].x - stepAngle * x50 * 25.0 - 100 * fabsMovingSpeed * x30, boneRot[bone_num].y, boneRot[bone_num].z + stepAngle * 1.0);
 		break;
 
 
-	case SWAT_LeftKnee:
-		if (fabs(tMovingSpeed) > 0.001)
-			boneRot[bone_num] = boneRot2[PF_CROUCHING][bone_num];
-		k = x125 * (s_1 + 1.0);
+	case SMS_LeftKnee:
 		zz1 = sp_1 * forwardMove;
 		if (zz1 < 0.0)
 			k1 = zz1 * 30 * x75;
-		q = quat(boneRot[bone_num].x - k1 + k * x10 * 0 - 10 * fabsMovingSpeed * x25, boneRot[bone_num].y, boneRot[bone_num].z);
+		q = quat(boneRot[bone_num].x - k1 - 100 * fabsMovingSpeed * x30, boneRot[bone_num].y, boneRot[bone_num].z);
 		break;
 
-	case SWAT_RightKnee:
-		if (fabs(tMovingSpeed) > 0.001)
-			boneRot[bone_num] = boneRot2[PF_CROUCHING][bone_num];
-		k = x125 * (s_1 - 1.0);
+	case SMS_RightKnee:
 		zz1 = sp_1 * forwardMove;
 		if (zz1 > 0.0)
 			k1 = zz1 * 30 * x75;
-		q = quat(boneRot[bone_num].x + k1 - k * x10 * 0 - 100 * fabsMovingSpeed * x25, boneRot[bone_num].y, boneRot[bone_num].z);
+		q = quat(boneRot[bone_num].x + k1  - 100 * fabsMovingSpeed * x30, boneRot[bone_num].y, boneRot[bone_num].z);
 		break;
 
-	case SWAT_LeftFoot:
+	case SMS_LeftFoot:
 		if (sp_1 > 0.0)
-			k = sp_1 * x25 * 30.0;
+			k = sp_1 * x30 * 30.0;
 		q = quat(stepAngle * 0.5 + k, 0.0, 0.0);
 		break;
 
-	case SWAT_RightFoot:
+	case SMS_RightFoot:
 		if (sp_1 < 0.0)
-			k = sp_1 * x25 * 30.0;
+			k = sp_1 * x30 * 30.0;
 		q = quat(-stepAngle * 0.5 - k, 0.0, 0.0);
 		break;
 
-	case SWAT_LeftToe:
+	case SMS_LeftToe:
 		q = quat(stepAngle * 0.5 + 10.0, 0.0, 0.0);
 		break;
 
-	case SWAT_RightToe:
+	case SMS_RightToe:
 		q = quat(-stepAngle * 0.5 + 10.0, 0.0, 0.0);
 		break;
 
-	case SWAT_LeftArm:
+	case SMS_LeftArm:
 		q = quat(boneRot[bone_num].x + fabs(tMovingSpeed) * 5 * kx, boneRot[bone_num].y, boneRot[bone_num].z + stepAngle * 2.5 * kx);
 		//q = quat(boneRot[bone_num].x + mRot1.x, boneRot[bone_num].y + mRot1.y, boneRot[bone_num].z + mRot1.z);
 		break;
 
-	case SWAT_LeftElbow:
-		q = quat(boneRot[bone_num].x, boneRot[bone_num].y, boneRot[bone_num].z + x25 * 5 * stepAngle * kx + 20 * fabs(tMovingSpeed) * kx);
+	case SMS_LeftElbow:
+		q = quat(boneRot[bone_num].x, boneRot[bone_num].y, boneRot[bone_num].z + x30 * 5 * stepAngle * kx + 20 * fabs(tMovingSpeed) * kx);
 		//q = quat(boneRot[bone_num].x + mRot2.x, boneRot[bone_num].y + mRot2.y, boneRot[bone_num].z + mRot2.z);
 		break;
 
-	case SWAT_LeftHand:
+	case SMS_LeftHand:
 		q = quat(boneRot[bone_num].x, boneRot[bone_num].y, boneRot[bone_num].z);
 		//q = quat(boneRot[bone_num].x + mRot3.x, boneRot[bone_num].y + mRot3.y, boneRot[bone_num].z + mRot3.z);
 		break;
 
-	case SWAT_RightArm:
+	case SMS_RightArm:
 		q = quat(boneRot[bone_num].x + fabs(tMovingSpeed) * 5 * kx, boneRot[bone_num].y, boneRot[bone_num].z + stepAngle * 1.5 * kx);
 		break;
 
-	case SWAT_RightElbow:
+	case SMS_RightElbow:
 		cValue = (boneRot[bone_num] - boneRot2[profile][bone_num]).length();
 		inTransition = fabs(cValue - pValue) > 0.00001;
 		pValue = cValue;
-		q = quat(boneRot[bone_num].x, boneRot[bone_num].y, boneRot[bone_num].z + x25 * 2.5 * stepAngle * kx - 10 * fabs(tMovingSpeed) * kx);
+		q = quat(boneRot[bone_num].x, boneRot[bone_num].y, boneRot[bone_num].z + x30 * 2.5 * stepAngle * kx - 10 * fabs(tMovingSpeed) * kx);
 		break;
 
-	case SWAT_RightHand:
+	case SMS_RightHand:
 		q = quat(boneRot[bone_num].x, boneRot[bone_num].y, boneRot[bone_num].z);
 		break;
 	}
-	tPos = p;
+	//if (gBoneRow[bone_num] < gNumOfActiveBones && gTesting)
+	//	lineDisplay(58, gBoneRow[bone_num] + 5, gBoneNames[bone_num] + String::format(" x=%.3f y=%.3f z=%.3f", -q.getAngle(vec3_left), q.getAngle(vec3_up), -q.getAngle(vec3_forward)));
 	tRot = tRot * q;
 }
 

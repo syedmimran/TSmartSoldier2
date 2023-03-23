@@ -48,11 +48,11 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>\UNIGINE Projects\TSmartSoldier 2\source\Weapons;\UNIGINE Projects\TSmartSoldier 2\source\Interfaces;\UNIGINE Projects\TSmartSoldier 2\source\TSMSoldier;\UNIGINE Projects\TSmartSoldier 2\source\Managers;\UNIGINE Projects\TSmartSoldier 2\source\TSmartSoldier;\UNIGINE Projects\TSmartSoldier 2\source\Utilities;\UNIGINE Projects\AIAvatar 1\source\Avatar;C:\NatNetSDK\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\UNIGINE Projects\TSmartSoldier 2\source\Weapons;D:\UNIGINE Projects\TSmartSoldier 2\source\Interfaces;D:\UNIGINE Projects\TSmartSoldier 2\source\TSMSoldier;D:\UNIGINE Projects\TSmartSoldier 2\source\Managers;D:\UNIGINE Projects\TSmartSoldier 2\source\TSmartSoldier;D:\UNIGINE Projects\TSmartSoldier 2\source\Utilities;C:\NatNetSDK\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\NatNetSDK\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>D:\Unigine Projects\TSmartSoldier 2\source\Managers;D:\Unigine Projects\TSmartSoldier 2\source\TSMSoldier;D:\Unigine Projects\TSmartSoldier 2\source\Interfaces;D:\Unigine Projects\TSmartSoldier 2\source\Weapons;D:\Unigine Projects\TSmartSoldier 2\source\Utilities;D:\UNIGINE Projects\AIAvatar 1\source\TAvatar;D:\UNIGINE Projects\AIAvatar 1\source\Utilities;D:\UNIGINE Projects\AIAvatar 1\source\Avatar;C:\NatNetSDK\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Unigine Projects\TSmartSoldier 2\source\Managers;D:\Unigine Projects\TSmartSoldier 2\source\TSMSoldier;D:\Unigine Projects\TSmartSoldier 2\source\Interfaces;D:\Unigine Projects\TSmartSoldier 2\source\Weapons;D:\Unigine Projects\TSmartSoldier 2\source\Utilities;C:\NatNetSDK\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\NatNetSDK\lib\x64;D:\NatNetSDK\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release2|x64'">
@@ -124,6 +124,7 @@
     <ClCompile Include="TSMSoldier\TSMSoldier4.cpp" />
     <ClCompile Include="TSMSoldier\TSMSoldier5.cpp" />
     <ClCompile Include="TSMSoldier\TSMSoldier6.cpp" />
+    <ClCompile Include="TSMSoldier\TSMSoldier7.cpp" />
     <ClCompile Include="TSMSoldier\TSMSoldierFingers.cpp" />
     <ClCompile Include="TSMSoldier\TSMSoldierPFCrouching.cpp" />
     <ClCompile Include="TSMSoldier\TSMSoldierData.cpp" />

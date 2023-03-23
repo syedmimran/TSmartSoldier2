@@ -16,6 +16,7 @@ float HeadingDifference(float curr, float target);
 float getBearing(Vec3 diff);
 double getWorldHeight(float x, float y, float hrange);
 bool GetToValue(float& actualPos, float targetValue, float rate);
+void NormaliseAngle(float& angle);
 
 
 void lineDisplay(int posy, int posx, String str, vec4 color = vec4(0.0, 1.0, 0.0, 1.0));

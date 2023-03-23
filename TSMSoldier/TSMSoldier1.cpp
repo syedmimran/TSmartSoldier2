@@ -1,12 +1,10 @@
 #include "TSMSoldier.h"
 #include "TPlayerManager.h"
 #include "SynckerInterface.h"
-//#include "ServerToClientEnemy.h"
-//#include "ServerToClientNet.h"
-//#include "IsmatInterface.h"
 #include "Utils.h"
 
-SendDataType mSendData;
+bool gTesting = false; 
+
 
 REGISTER_COMPONENT(TSMSoldier);
 
@@ -17,12 +15,16 @@ void TSMSoldier::init() {
 	ObjectPtr human = checked_ptr_cast<Object>(node);
 	human->setName(String::format("Human_%d_%d", (int)human_type, (int)id));
 	mAvatar = checked_ptr_cast<ObjectMeshSkinned>(node);
-	mAvatarHead = checked_ptr_cast<ObjectMeshSkinned>(mAvatar->getChild(0));
 	mRifle = checked_ptr_cast<ObjectMeshStatic>(rifleRef->getChild(0));
 	rifleRot = mRifle->getRotation();
-	// rrr
+	objtext = checked_ptr_cast<ObjectText>(node->getChild(0));
+	dispaytext = "X";
+	if (objtext)
+		textPos = objtext->getPosition();
+
 	mMarker = checked_ptr_cast<Object>(NodeReference::create("Nodes/Cuboid.node")->getReference());
 	mMarker->setEnabled(false);
+	speedVariation = 5 + ((rand() % 20) - 10) * 0.01;
 
 	setupObstacleSensors();
 	wpIndex = 0;
@@ -38,7 +40,8 @@ void TSMSoldier::init() {
 
 	wIntersection = WorldIntersection::create();
 	mAttackPoint = Game::getPlayer()->getWorldPosition();
-	//mAttackPoint = Vec3(0.0, 0.0, 0.0);
+	// rrr
+	//mAttackPoint = Vec3(0.0, -1000.0, 0.0);
 
 	mBulletCount = magazineCapacity = 8;
 	mMagazineCount = 5;
@@ -75,10 +78,6 @@ void TSMSoldier::init() {
 	wayPointList[2].action = AC_AIM;
 	wayPointList[2].attribute = 0;
 
-	objtext = checked_ptr_cast<ObjectText>(node->getChild(1));
-	dispaytext = "X";
-	if(objtext)
-		textPos = objtext->getPosition();
 	//mAlertLogicSequence = 0;
 	//mAlertFunctionSequence = 0;
 	mTime = 0.0;
@@ -91,7 +90,7 @@ void TSMSoldier::init() {
 		String name = padDoorOpener->getName();
 	}
 
-	initBonesAndAll();
+	InitBonesAndAll();
 	setSmartLevel(0);
 
 	switch (behaviour_type) {
@@ -101,29 +100,58 @@ void TSMSoldier::init() {
 	case 1:
 		changeAction(AC_PATROL);
 		break;
-	case 2:
-		setupPatrolLogics();
-		changeAction(AC_PATROL);
-		break;
-	case 3:
-		setupPatrolRoute();
-		changeAction(AC_PATROL);
-		break;
-	case 4:
-		setupPatrolRoute();
-		changeAction(AC_PATROL);
-		break;
-	case 5:
-		setupPatrolRoute();
-		changeAction(AC_PATROL);
-		break;
 	case 6:
 		changeAction(AC_ATTACK);
 		break;
 	default:
 		break;
 	}
+	InitAnimFile();
 }
+
+
+void TSMSoldier::update() {
+	switch (behaviour_type) {
+	case 0 : // test
+		gTesting = true; 
+		getKeyboardInput();
+		updatePosition();
+		updateAction();
+		updateSmartLevel();
+		updateMovement();
+		//sendData();
+		displayInfo();
+		showInfo();
+		break;
+	case 1: case 2: case 3: case 4:case 5: // patrol
+	case 6: // attack
+	case 7: 
+		updatePosition();
+		updateAction();
+		updateSmartLevel();
+		updateMovement();
+		//sendData();
+		showInfo();
+		break;
+	case 8: // animation
+		getKeyboardInput();
+		playAnimFile();
+		//sendDataTest();
+		displayInfo();
+		showInfo();
+		break;
+	case 10:
+		processClient();
+		objtext->setEnabled(0);
+		break;
+	case 11:
+		processClientTest();
+		objtext->setEnabled(0);
+		break;
+	}
+}
+
+
 
 int TSMSoldier::getProfileType(int profile) {
 	switch (profile) {
@@ -230,8 +258,6 @@ void TSMSoldier::updateAction() {
 
 	isShooting = false;
 
-	updateAvatarInput();
-
 	updateWeaponOnTarget();
 
 	if (set_Action==AC_DEAD && !isDead) {
@@ -283,88 +309,12 @@ void TSMSoldier::updateAction() {
 		break;
 	}
 
-
-	setInView();
 	theEnemyFound = FindEnemy();
 	//movingSpeed = 1.0;
 	//if (theEnemyFound)
 	//	movingSpeed = 0.0;
-
-	groupInstruction = 0;
 }
 
-void TSMSoldier::update() {
-	//if (IsmatInterface::get()->getFreeze())
-	//	return;
-
-	if (behaviour_type != 9 ) {
-		updatePosition();
-		updateAction();
-		updateSmartLevel();
-		updateMovement();
-		processRecording();
-		displayInfo();
-		getKeyboardInput();
-		sendData();
-		showInfo(); // rrr 
-	}
-	else if (behaviour_type == 9) {
-		processClient();
-		objtext->setEnabled(0);
-
-	}
-}
-
-
-
-void TSMSoldier::sendData() {
-	mSendData.Pos = (vec3)mCurWorldPos;
-	mSendData.Rot = mCurWorldRot;
-	mSendData.mProfile = mProfile;
-	mSendData.mPrevProfile = mPrevProfile;
-	mSendData.mActionMode = action_Mode;
-	mSendData.tMovingSpeed = tMovingSpeed;
-	mSendData.spineRotV = spineRotV;
-	mSendData.headRotV = headRotV;
-	mSendData.aimingDirection = aimingDirection;
-
-	rifleAimStatus ? mSendData.Attribute |= 1 : mSendData.Attribute &= ~1;
-	reloadStatus ? mSendData.Attribute |= 2 : mSendData.Attribute &= ~2;
-	reload2Status ? mSendData.Attribute |= 4 : mSendData.Attribute &= ~4;
-	isShooting ? mSendData.Attribute |= 8 : mSendData.Attribute &= ~8;
-	triggerPull ? mSendData.Attribute |= 16 : mSendData.Attribute &= ~16;
-	weaponOnTarget ? mSendData.Attribute |= 32 : mSendData.Attribute &= ~32;
-	isDead ? mSendData.Attribute |= 64 : mSendData.Attribute &= ~64;
-}
-
-
-void TSMSoldier::processClient() {
-	mCurWorldPos = (Vec3)mSendData.Pos + Vec3(2.0, 2.0, 0.0);
-	mCurWorldRot = mSendData.Rot;
-	node->setWorldPosition(mCurWorldPos);
-	node->setWorldRotation(mCurWorldRot);
-
-	mProfile = mSendData.mProfile;
-	mPrevProfile = mSendData.mPrevProfile;;
-	action_Mode = mSendData.mActionMode;
-	tMovingSpeed = mSendData.tMovingSpeed;
-	spineRotV   = mSendData.spineRotV;
-	headRotV   = mSendData.headRotV;
-	aimingDirection = mSendData.aimingDirection;
-
-	rifleAimStatus = mSendData.Attribute & 1;
-	reloadStatus = mSendData.Attribute & 2;
-	reload2Status = mSendData.Attribute & 4;
-	isShooting = mSendData.Attribute & 8;
-	triggerPull = mSendData.Attribute & 16;
-	weaponOnTarget = mSendData.Attribute & 32;
-	isDead = mSendData.Attribute & 64;
-
-	updateMovement();
-
-	displayInfo();
-
-}
 
 
 
@@ -389,8 +339,8 @@ void TSMSoldier::showInfo() {
 	objtext->setText(dispaytext);
 	Vec3 testPos = pos + (pos2 +Vec3(0.0,0.0, 2.0+cameraViewDistance*0.01) - pos) * 5.42 / cameraViewDistance;
 	objtext->setWorldPosition(testPos);
-	objtext->setFontSize(30);
-	objtext->setTextColor(vec4_white);
+	objtext->setFontSize(20);
+	objtext->setTextColor(vec4_black);
 	SynckerInterface::get()->SendTestMessage(objtext, String(dispaytext));
 
 }
@@ -403,6 +353,12 @@ void TSMSoldier::setupText1(int in_func) {
 }
 
 void TSMSoldier::getKeyboardInput() {
+	updateAvatarInput();
+
+	if (Input::isKeyDown(Input::KEY_F)) {
+		mFreeze = !mFreeze;
+	}
+
 	/*if (App::getKeyState('t')) {
 		App::setKeyState('t', 0);
 		testMode = !testMode;

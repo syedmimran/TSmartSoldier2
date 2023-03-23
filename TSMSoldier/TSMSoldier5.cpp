@@ -1,7 +1,5 @@
 #include "TSMSoldier.h"
 #include <UnigineVisualizer.h>
-//#include "SimbatInterface.h"
-//#include "IsmatInterface.h"
 
 float TSMSoldier::avoidObstacle() {
 	if (!avoid_the_obstacles || action_Mode == AC_DEAD)

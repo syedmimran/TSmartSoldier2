@@ -83,6 +83,15 @@ float HeadingDifference(float curr, float target) {
 	return headingdiff;
 }
 
+
+void NormaliseAngle(float& angle) {
+	if (angle > 180.0)
+		angle -= 360.0;
+	else if (angle < -180.0)
+		angle += 360;
+}
+
+
 double getWorldHeight(float x, float y, float hrange) {
 	Vec3 p0 = Vec3(x, y, hrange);
 	Vec3 p1 = Vec3(x, y, -hrange);

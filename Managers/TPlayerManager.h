@@ -32,6 +32,15 @@ public:
 	void addToTeamList(ObjectPtr human, int listNo);
 	void addToGroupList(ObjectPtr human, int listNo);
 	void setGroupReadyToAttack(int groupNo);
+	void resetNumOfSoldierReady() {
+		NumOfSoldierReady = 0;
+	}
+	void oneSoldierIsReady() {
+		NumOfSoldierReady++;
+	}
+	int getNumOfSoldierReady() {
+		return NumOfSoldierReady;
+	}
 	bool checkHumanAlreadyExist(unsigned char type, int id) {
 		if (soldiers[id])
 			return true;
@@ -61,6 +70,7 @@ private:
 	int HumanIndex = 0;
 	int vehicleId = 0;
 	int SoldierDied = 0;
+	int NumOfSoldierReady = 0;
 	Map <int, ObjectPtr> soldiers;
 	Vector <Vector <ObjectPtr>> Team_Humans;
 	Vector <Vector <ObjectPtr>> Team_Groups;

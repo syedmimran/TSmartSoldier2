@@ -32,6 +32,7 @@ bool TSMSoldier::FindEnemy() {
 }
 
 NodePtr TSMSoldier::FindCameraPlayer() {
+	return nullptr;
 	float dis = 1000.0;
 	Vec3 headPos = HeadBonePoint->getWorldPosition();
 	NodePtr enemy = Game::getPlayer();
@@ -117,21 +118,18 @@ bool TSMSoldier::CheckThreat() {
 
 
 
-int TSMSoldier::myEnemyCurState() {
+int TSMSoldier::getEnemyCurAction() {
 	if (!theEnemy)
-		return  0;
+		return  -1;
 	PropertyPtr objectProperty = theEnemy->getProperty();
 	if (objectProperty) {
-		PropertyParameterPtr param = objectProperty->getParameterPtr("mCurState");
+		PropertyParameterPtr param = objectProperty->getParameterPtr("mCurAction");
 		return param->getValueInt();
 	}
-	return  0;
+	return  -1;
 
 }
 
-void TSMSoldier::setInView() {
-
-}
 
 
 

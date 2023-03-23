@@ -112,28 +112,28 @@ void TSMSoldier::setAimming(int profile, int bone_num) {
 	
 	switch (bone_num) {
 
-	case SWAT_RightArm:
+	case SMS_RightArm:
 		q = jointRot[ROT_R_ARM][profile][AIMMING];
 		//q = quat(mRot1.x, mRot1.y, mRot1.z);
 
 		break;
-	case SWAT_RightElbow:
+	case SMS_RightElbow:
 		q = jointRot[ROT_R_ELBOW][profile][AIMMING];
 		//q = quat(mRot2.x, mRot2.y, mRot2.z);
 		break;
-	case SWAT_RightHand:
+	case SMS_RightHand:
 		q = jointRot[ROT_R_HAND][profile][AIMMING];
 		//q = quat(mRot3.x, mRot3.y, mRot3.z);
 		break;
-	case SWAT_LeftArm:
+	case SMS_LeftArm:
 		q = jointRot[ROT_L_ARM][profile][AIMMING];
 		//q = quat(mRot1.x, mRot1.y, mRot1.z);
 		break;
-	case SWAT_LeftElbow:
+	case SMS_LeftElbow:
 		q = jointRot[ROT_L_ELBOW][profile][AIMMING];
 		//q = quat(mRot2.x, mRot2.y, mRot2.z);
 		break;
-	case SWAT_LeftHand:
+	case SMS_LeftHand:
 		q = jointRot[ROT_L_HAND][profile][AIMMING];
 		//q = quat(mRot3.x, mRot3.y, mRot3.z);
 		break;
@@ -148,32 +148,32 @@ void TSMSoldier::setReloading(int profile, int bone_num) {
 	quat q = quat_identity;
 	switch (bone_num) {
 
-	case SWAT_RightArm:
+	case SMS_RightArm:
 		q = jointRot[ROT_R_ARM][profile][RELOAD];
 		//q = quat(mRot1.x, mRot1.y, mRot1.z);
 		break;
 
-	case SWAT_RightElbow:
+	case SMS_RightElbow:
 		q = jointRot[ROT_R_ELBOW][profile][RELOAD];
 		//q = quat(mRot2.x, mRot2.y, mRot2.z);
 		break;
 
-	case SWAT_RightHand:
+	case SMS_RightHand:
 		q = jointRot[ROT_R_HAND][profile][RELOAD];
 		//q = quat(mRot3.x, mRot3.y, mRot3.z);
 		break;
 
-	case SWAT_LeftArm:
+	case SMS_LeftArm:
 		q = jointRot[ROT_L_ARM][profile][RELOAD];
 		//q = quat(mRot1.x, mRot1.y, mRot1.z);
 		break;
 
-	case SWAT_LeftElbow:
+	case SMS_LeftElbow:
 		q = jointRot[ROT_L_ELBOW][profile][RELOAD];
 		//q = quat(mRot2.x, mRot2.y, mRot2.z);
 		break;
 
-	case SWAT_LeftHand:
+	case SMS_LeftHand:
 		q = jointRot[ROT_L_HAND][profile][RELOAD];
 		//q = quat(mRot3.x, mRot3.y, mRot3.z);
 		break;
@@ -189,17 +189,17 @@ void TSMSoldier::setReloading2(int profile, int bone_num) {
 	quat q = quat_identity;
 	switch (bone_num) {
 
-	case SWAT_LeftArm:
+	case SMS_LeftArm:
 		q = jointRot[ROT_L_ARM][profile][RELOAD2];
 		//q = quat(mRot1.x, mRot1.y, mRot1.z);
 		break;
 
-	case SWAT_LeftElbow:
+	case SMS_LeftElbow:
 		q = jointRot[ROT_L_ELBOW][profile][RELOAD2];
 		//q = quat(mRot2.x, mRot2.y, mRot2.z);
 		break;
 
-	case SWAT_LeftHand:
+	case SMS_LeftHand:
 		q = jointRot[ROT_L_HAND][profile][RELOAD2];
 		//q = quat(mRot3.x, mRot3.y, mRot3.z);
 		break;
@@ -212,14 +212,14 @@ void TSMSoldier::setShooting(int bone_num) {
 		return;
 	quat q = quat_identity;
 	switch (bone_num) {
-	case SWAT_Spine:
+	case SMS_Spine:
 		q = quat(-triggerCycle * 1.0, 0.0, 0.0);
 		break;
-	case SWAT_LeftElbow:
+	case SMS_LeftElbow:
 		q = quat(0.0, -triggerCycle * 1.0, 0.0);
 		break;
 
-	case SWAT_RightElbow:
+	case SMS_RightElbow:
 		q = quat(0.0, triggerCycle * 1.0, 0.0);
 		break;
 	}

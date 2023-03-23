@@ -1,18 +1,23 @@
 #include "TSMSoldier.h"
 #include "TPlayerManager.h"
 #include "Joystick.h"
+#include "Utils.h"
+//#include "IsmatInterface.h" // rrr
 
 
 void TSMSoldier::updateTestingLogicSequence() {
-	if (mfirstModeState[AC_TESTING]) {
-		mfirstModeState[AC_TESTING] = false;
-		tempProfile = PF_STANDING1;
+	if (mFirstAction[AC_TESTING]) {
+		mFirstAction[AC_TESTING] = false;
+		tempProfile = PF_PRONNING;
 		changeProfile(tempProfile);
-		setMovingSpeed(1.0);
+		setMovingSpeed(0.20);
+		tempMovingSpeed = 0.0;
 		setMoveStatus(false);
 		setTurnRate(2.5);
-		setTargetPos(Vec3(-40.0, 4.0, 0.0));
+		setTargetPos(Vec3(4000.0, 4.0, 0.0));
 		showMarker(mTargetPos, 2);
+		//node->setWorldRotation(quat(0.0, 0.0, -90));
+		//Game::setPlayer(checked_ptr_cast<PlayerDummy>(node->getChild(6)));
 		return;
 	}
 	if (TJoystickControl::get()->getButton(2) && !jsButtonPress[2]) {
@@ -49,7 +54,7 @@ void TSMSoldier::updateTestingLogicSequence() {
 	if (TJoystickControl::get()->getButton(3)) {
 		jsButtonPress[3] = true;
 		if (tempMovingSpeed > -1.0)
-			tempMovingSpeed -= 0.01;
+			tempMovingSpeed -= 0.005;
 
 		//mLeftFingerAngle -= 0.1;
 		setMovingSpeed(tempMovingSpeed);
@@ -57,8 +62,8 @@ void TSMSoldier::updateTestingLogicSequence() {
 
 	if (TJoystickControl::get()->getButton(5)) {
 		jsButtonPress[5] = true;
-		if (tempMovingSpeed < 3.0)
-			tempMovingSpeed += 0.01;
+		if (tempMovingSpeed < 4.5)
+			tempMovingSpeed += 0.005;
 		//mLeftFingerAngle += 0.1;
 		setMovingSpeed(tempMovingSpeed);
 	}
@@ -87,12 +92,14 @@ void TSMSoldier::updateTestingLogicSequence() {
 	if (TJoystickControl::get()->getButton(8) && !jsButtonPress[8]) {
 		jsButtonPress[8] = true;
 		move_status = !move_status;
+		if (!move_status)
+			node->setWorldPosition(Vec3(-1.0, 3.0, 0.0));
 	}
 
 	if (!TJoystickControl::get()->getButton(8))
 		jsButtonPress[8] = false;
 
-
+	
 	triggerPull = TJoystickControl::get()->getTrigger();
 	if (Input::isKeyDown(Input::KEY_M)) {
 		prev_action_Mode = AC_TESTING;
@@ -141,8 +148,10 @@ void TSMSoldier::setupPointOfAttack() {
 	    pos4 += Vec3((float)attackSeparation * offset + attackSeparation/2.0, 0.0, 0.0);
 	pos4 = pos4 * quat(rotateZ(-r));
 	AttackStartPoint = pos4 + attackPos;
-	AttackStartPoint.z = h;
 	// rrr
+	AttackStartPoint.z = getWorldHeight(AttackStartPoint.x, AttackStartPoint.y, 1000.0);
+	//AttackStartPoint.z = IsmatInterface::get()->getWorldHeight(AttackStartPoint.x, AttackStartPoint.y, 1000.0);
+	
 	showMarker(AttackStartPoint, a_id);
 
 	pn = AttackStartPoint - (Vec3)initPos;
@@ -151,57 +160,58 @@ void TSMSoldier::setupPointOfAttack() {
 		node->setRotation(quat(rotateZ(r)));
 	else
 		node->setWorldRotation(quat(rotateZ(r)));
-	mCurWorldRot = node->getWorldRotation();
 }
 
 
 void TSMSoldier::updateAttackLogicSequence() {
 	if (numOfAttackPersons == 0)
 		return;
-	if (mfirstModeState[AC_ATTACK]) {
+	if (mFirstAction[AC_ATTACK]) {
 		setupPointOfAttack();
 		changeProfile(PF_STANDING1 + rand() % 2, 2.5);
-		mfirstModeState[AC_ATTACK] = false;
-		waitingToAttack = false;
+		mFirstAction[AC_ATTACK] = false;
 		setTargetPos(AttackStartPoint);
-		setTurnRate(2.0);
+		setTurnRate(2.5);
+		groupInstruction = 0;
 		oddX = 0;
 		return;
 	}
 	if (groupInstruction == 1) {
-		coordinateTheAttack = true;
-		attack_start_timer = 0.0;
+		startTheAttack = true;
+		groupInstruction = 0;
 	}
 
 	if (!arrivedAtStartPoint) {
 		arrivedAtStartPoint = mTargetArrived;
-		if (arrivedAtStartPoint)
-		  wait_attack_timer = 0.0;
+		if (arrivedAtStartPoint) {
+			wait_attack_timer = 0.0;
+			TPlayerManager::get()->oneSoldierIsReady();
+		}
 	}
 
-	if (arrivedAtStartPoint && !coordinateTheAttack) {
+	if (arrivedAtStartPoint && !startTheAttack) {
 		wait_attack_timer += Game::getIFps();
-		if (!waitingToAttack) 
-		    changeProfile(PF_CROUCHING, 0.0);
-		arrivedAtStartPoint = true;
-		waitingToAttack = true;
+		changeProfile(PF_CROUCHING, 0.0);
 		setTargetPos(mAttackPoint);
-		if (attack_id == (numOfAttackPersons-1) && wait_attack_timer > 1.0) { // last person
-			coordinateTheAttack = true;
-			waitingToAttack = false;
-			setFindEnemy(true);
+		int x = (int)attack_id;
+		int y = (int)numOfAttackPersons;
+		int z = TPlayerManager::get()->getNumOfSoldierReady();
+		if (TPlayerManager::get()->getNumOfSoldierReady() == numOfAttackPersons && wait_attack_timer > 5.0) { // last person
+			startTheAttack = true;
+			attack_start_timer = 0.0;
 			TPlayerManager::get()->setGroupReadyToAttack((int)group_type);
 		}
 		return;
 	}
 
 
-	if (coordinateTheAttack) {
+	if (startTheAttack) {
 		int x = (int)attack_id;
-		//setModeAim(true);
+		setFindEnemy(true);
+		//setWeaponAimming(true);
 		//if ((AttackPoint- mCurWorldPos).length() < 20.0)
 		attack_start_timer += Game::getIFps();
-		if (prev_attack_start_timer % 5 == 0) { // rrr
+		if (prev_attack_start_timer % 15 == 0) { 
 			if (!newAttackModeDone) {
 				targetMove = Vec3(rand() % 3 - 1, rand() % 3 - 1, 0.0);
 				oddX++;
@@ -261,21 +271,21 @@ void TSMSoldier::updatePatrolLogicSequence() {
 void TSMSoldier::updatePatrolLogicSequence1() {
 	NodePtr n;
 
-	if (mfirstModeState[AC_PATROL]) {
-		mfirstModeState[AC_PATROL] = false;
+	if (mFirstAction[AC_PATROL]) {
+		mFirstAction[AC_PATROL] = false;
 		changeProfile(PF_STANDING1, 1.0);
 		pointPatrolIndex = 0;
 		if (patrolRoute) {
 			numOfWaypoints = patrolRoute->getNumChildren();
 			n = patrolRoute->getChild(pointPatrolIndex);
 			setTargetPos(n->getWorldPosition());
-			showMarker(n->getWorldPosition(), pointPatrolIndex);
+			//showMarker(n->getWorldPosition(), pointPatrolIndex);
 		}
 		else
 			setMovingSpeed(0.0);
 
 		setTurnRate(2.0);
-		setFindEnemy(false);
+		setFindEnemy(true);
 		return;
 	}
 	modeTimer[AC_PATROL] += Game::getIFps();
@@ -301,7 +311,7 @@ void TSMSoldier::updatePatrolLogicSequence1() {
 		pointPatrolIndex %= numOfWaypoints;
 		n = patrolRoute->getChild(pointPatrolIndex);
 		setTargetPos(n->getWorldPosition());
-		showMarker(n->getWorldPosition(), pointPatrolIndex);
+		//showMarker(n->getWorldPosition(), pointPatrolIndex);
 	}
 }
 
@@ -327,10 +337,10 @@ void TSMSoldier::updatePatrolLogicSequence5() {
 
 
 void TSMSoldier::updateSpotLogicSequence() {
-	if (mfirstModeState[AC_SPOT]) {
+	if (mFirstAction[AC_SPOT]) {
 		//changeProfile(PF_CROUCHING, 0.0);
 		changeProfile(PF_STANDING1, 0.0);
-		mfirstModeState[AC_SPOT] = false;
+		mFirstAction[AC_SPOT] = false;
 		return;
 	}
 	modeTimer[AC_SPOT] += Game::getIFps();
@@ -351,10 +361,10 @@ void TSMSoldier::updateSpotLogicSequence() {
 
 
 void TSMSoldier::updateAimLogicSequence() {
-	if (mfirstModeState[AC_AIM]) {
+	if (mFirstAction[AC_AIM]) {
 		//changeProfile(PF_CROUCHING, 0.0);
 		changeProfile(PF_STANDING1, 0.0);
-		mfirstModeState[AC_AIM] = false;
+		mFirstAction[AC_AIM] = false;
 		return;
 	}
 	modeTimer[AC_AIM] += Game::getIFps();
@@ -377,8 +387,8 @@ void TSMSoldier::updateAimLogicSequence() {
 void TSMSoldier::updateShootLogicSequence() {
 	if (isDead || inTransition || inReloadOn)
 		return;
-	if (mfirstModeState[AC_SHOOT]) {
-		mfirstModeState[AC_SHOOT] = false;
+	if (mFirstAction[AC_SHOOT]) {
+		mFirstAction[AC_SHOOT] = false;
 		return;
 	}
 	modeTimer[AC_SHOOT] += Game::getIFps();
@@ -432,9 +442,9 @@ void TSMSoldier::setupRetreatPoint() {
 void TSMSoldier::updateRetreatLogicSequence() {
 	if (isDead || inTransition)
 		return;
-	if (mfirstModeState[AC_RETREAT]) {
+	if (mFirstAction[AC_RETREAT]) {
 		changeProfile(PF_STANDING1, 3.0);
-		mfirstModeState[AC_RETREAT] = false;
+		mFirstAction[AC_RETREAT] = false;
 		modeTimer[AC_RETREAT] = 0.0;
 		//setMoveStatus(false);
 		setTurnRate(5.0);
@@ -474,10 +484,10 @@ void TSMSoldier::updateThrowGrenadeLogicSequence() {
 
 
 void TSMSoldier::updateDeadLogicSequence() {
-	if (mfirstModeState[AC_DEAD]) {
+	if (mFirstAction[AC_DEAD]) {
 		newProfileQueue.clear();
 		//changeAction(AC_DEAD);
-		mfirstModeState[AC_DEAD] = false;
+		mFirstAction[AC_DEAD] = false;
 		deadTransition = true;
 		changeProfile(PF_DYING1 + rand() % 3, 0.0);
 		modeTimer[AC_DEAD] = 0.0;
@@ -487,10 +497,16 @@ void TSMSoldier::updateDeadLogicSequence() {
 
 	mMovingSpeed /= 1.01;
 	if (modeTimer[AC_DEAD] > 10.0)
-		disposeMe();
+		 disposeMe();
 	if (Input::isKeyDown(Input::KEY_N)) {
-		prev_action_Mode = AC_DEAD;
-		changeAction(AC_TESTING);
+		int x = prev_action_Mode;
+		prev_action_Mode = AC_PATROL;
+		changeAction(x);
+		mPrevProfile = PF_STANDING2;
+		mProfile = PF_PRONNING;
+		isDead = false;
+		deadTransition = false; 
+		inTransition = true;
 	}
 }
 

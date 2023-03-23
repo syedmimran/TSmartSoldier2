@@ -58,75 +58,70 @@ using namespace Math;
 #define GN_FEMALE 1
 
 
+enum SMS_Bones {
+	SMS_Hips   = 0,
+	SMS_Spine  = 1,
+	SMS_Spine1 = 2,
+	SMS_Spine2 = 3,
+	SMS_Neck   = 4,
+	//SMS_Neck1 = 5,
+	SMS_Head = 6,
 
-extern String ActionStr[];
-extern String ProfileStr[];
+	//SMS_REye = 7,
+	//SMS_LEye = 8,
+	//SMS_Jaw  = 9,
 
-enum SWATBones {
-	SWAT_Hips   = 0,
-	SWAT_Spine  = 1,
-	SWAT_Spine1 = 2,
-	SWAT_Spine2 = 3,
-	SWAT_Neck   = 4,
-	//SWAT_Neck1 = 5,
-	SWAT_Head = 6,
+	SMS_LeftShoulder = 10,
+	SMS_LeftArm      = 11,
+	SMS_LeftElbow    = 12,
+	SMS_LeftHand     = 13,
 
-	//SWAT_REye = 7,
-	//SWAT_LEye = 8,
-	//SWAT_Jaw  = 9,
+	SMS_LeftThumb1  = 14,
+	SMS_LeftThumb2  = 15,
+	SMS_LeftThumb3  = 16,
+	SMS_LeftIndex1  = 17,
+	SMS_LeftIndex2  = 18,
+	SMS_LeftIndex3  = 19,
+	SMS_LeftMiddle1 = 20,
+	SMS_LeftMiddle2 = 21,
+	SMS_LeftMiddle3 = 22,
+	SMS_LeftRing1   = 23,
+	SMS_LeftRing2   = 24,
+	SMS_LeftRing3   = 25,
+	SMS_LeftPinky1  = 26,
+	SMS_LeftPinky2  = 27,
+	SMS_LeftPinky3  = 28,
 
-	SWAT_LeftShoulder = 10,
-	SWAT_LeftArm      = 11,
-	SWAT_LeftElbow    = 12,
-	SWAT_LeftHand     = 13,
+	SMS_RightShoulder = 29,
+	SMS_RightArm      = 30,
+	SMS_RightElbow    = 31,
+	SMS_RightHand     = 32,
 
-	SWAT_LeftThumb1  = 14,
-	SWAT_LeftThumb2  = 15,
-	SWAT_LeftThumb3  = 16,
-	SWAT_LeftIndex1  = 17,
-	SWAT_LeftIndex2  = 18,
-	SWAT_LeftIndex3  = 19,
-	SWAT_LeftMiddle1 = 20,
-	SWAT_LeftMiddle2 = 21,
-	SWAT_LeftMiddle3 = 22,
-	SWAT_LeftRing1   = 23,
-	SWAT_LeftRing2   = 24,
-	SWAT_LeftRing3   = 25,
-	SWAT_LeftPinky1  = 26,
-	SWAT_LeftPinky2  = 27,
-	SWAT_LeftPinky3  = 28,
+	SMS_RightThumb1  = 33,
+	SMS_RightThumb2  = 34,
+	SMS_RightThumb3  = 35,
+	SMS_RightIndex1  = 36,
+	SMS_RightIndex2  = 37,
+	SMS_RightIndex3  = 38,
+	SMS_RightMiddle1 = 39,
+	SMS_RightMiddle2 = 40,
+	SMS_RightMiddle3 = 41,
+	SMS_RightRing1   = 42,
+	SMS_RightRing2   = 43,
+	SMS_RightRing3   = 44,
+	SMS_RightPinky1  = 45,
+	SMS_RightPinky2  = 46,
+	SMS_RightPinky3  = 47,
 
-	SWAT_RightShoulder = 29,
-	SWAT_RightArm      = 30,
-	SWAT_RightElbow    = 31,
-	SWAT_RightHand     = 32,
+	SMS_LeftHip  = 48,
+	SMS_LeftKnee = 49,
+	SMS_LeftFoot = 50,
+	SMS_LeftToe  = 51,
 
-	SWAT_RightThumb1  = 33,
-	SWAT_RightThumb2  = 34,
-	SWAT_RightThumb3  = 35,
-	SWAT_RightIndex1  = 36,
-	SWAT_RightIndex2  = 37,
-	SWAT_RightIndex3  = 38,
-	SWAT_RightMiddle1 = 39,
-	SWAT_RightMiddle2 = 40,
-	SWAT_RightMiddle3 = 41,
-	SWAT_RightRing1   = 42,
-	SWAT_RightRing2   = 43,
-	SWAT_RightRing3   = 44,
-	SWAT_RightPinky1  = 45,
-	SWAT_RightPinky2  = 46,
-	SWAT_RightPinky3  = 47,
-
-	SWAT_LeftHip  = 48,
-	SWAT_LeftKnee = 49,
-	SWAT_LeftFoot = 50,
-	SWAT_LeftToe  = 51,
-
-	SWAT_RightHip  = 52,
-	SWAT_RightKnee = 53,
-	SWAT_RightFoot = 54,
-	SWAT_RightToe  = 55,
-	SWAT_NumOfActiveBones = 22,
+	SMS_RightHip  = 52,
+	SMS_RightKnee = 53,
+	SMS_RightFoot = 54,
+	SMS_RightToe  = 55
 
 };
 
@@ -156,6 +151,15 @@ typedef struct {
 
 extern vec3 jointRot2[NO_OF_ROTS][PF_NUM_OF_PROFILES][4];
 extern vec3 boneRot2[PF_NUM_OF_PROFILES][NUM_OF_BONES];
+extern int  gBoneId[];
+extern int  gBoneRow[];
+extern int  gNumOfActiveBones;
+extern int gNumOfFingerBones;
+extern String gBoneNames[];
+
+extern String ActionStr[];
+extern String ProfileStr[];
+bool extern gTesting;
 
 class TSoldierState;
 
@@ -171,7 +175,7 @@ public:
 	PROP_PARAM(Int, gender, 0);
 	PROP_PARAM(Int, id, 0);
 	PROP_PARAM(Node, rifleRef, 0);
-	PROP_PARAM(Int, mCurState)
+	PROP_PARAM(Int, mCurAction)
 	PROP_PARAM(Int, set_Action, 0);
 	PROP_PARAM(Int, isDead, 0);
 	PROP_PARAM(Int, smartLevel, 0);
@@ -203,6 +207,7 @@ private:
 	Vector<WayPointType> wayPointList;
 	Vector<int> newProfileQueue;
 	String Ai_Name;
+	float speedVariation = 0.0;
 	int action_Mode = 0;
 	int prev_action_Mode = -1;
 	bool testMode = false;
@@ -219,7 +224,6 @@ private:
 	quat  mCurLocalRot;
 	Vec3  mCurLocalPos;
 	Vec3 JoyPos;
-	char tempProfile = PF_STANDING1;
 	Vec3 retreatPointLeft = Vec3_zero;
 	Vec3 retreatPointRight = Vec3_zero;
 	Vec3 retreatPointMiddle = Vec3_zero;
@@ -232,7 +236,6 @@ private:
 	float mRightFingerAngle = 0.0;
 	float cLeftFingerAngle = 0.0;
 	float cRightFingerAngle = 0.0;
-	int   fingerTotalIndex = 0;
 
 	bool inAimingOn = false;
 	bool inAimingOff = false;
@@ -250,6 +253,7 @@ private:
 	float crOffValue = 0.0;
 	float prOffValue = 0.0;
 	bool ReloadInTransition = false;
+	float mAnimationSpeed = 30.0;
 
 	bool inReload2On = false;
 	float cr2OnValue = 0.0;
@@ -259,7 +263,7 @@ private:
 	float pr2OffValue = 0.0;
 	bool Reload2InTransition = false;
 	quat rifleRot;
-
+	int numOfFingerBonesIncluded = 0;
 
 	float mTargetHeading;
 	float mCurHeading = 0.0;
@@ -273,11 +277,9 @@ private:
 	PropertyParameterPtr WeaponTriggerProp;
 	PropertyParameterPtr WeaponAttackModeProp;
 	PropertyParameterPtr WeaponHitCounterProp;
-	ObjectMeshSkinnedPtr mAvatar, mAvatarHead;
+	ObjectMeshSkinnedPtr mAvatar;
 	ObjectMeshStaticPtr  mRifle;
 	ObjectPtr mMarker;
-
-	int hitCounter = 0;
 
 	void getKeyboardInput();
 	void showInfo();
@@ -338,8 +340,6 @@ private:
 
 	void processRecording();
 	void processPlayback();
-	void setupPatrolLogics();
-	void setupPatrolRoute();
 	
 
 	void updateTestingLogicSequence();
@@ -364,11 +364,17 @@ private:
 	void turnXTo_G();
 
 	bool checkPatrolLogicSequenceIsOk(int next_nextSequence);
-	int  myEnemyCurState();
+	int  getEnemyCurAction();
 	void setWeaponAimming(bool aim);
 	bool setThisTeamIdle(int teamtype);
 
-	void setInView();
+
+	void InitEyePoint();
+	void InitBonesTransform();
+	void InitActiveBones();
+	void InitBonesRot();
+	void InitBonesAndAll();
+
 	void getInputRot();
 
 	Vec3 mRot1 = Vec3_zero;
@@ -380,14 +386,13 @@ private:
 	int mPatrolLogicSequence;
 	int mPatrolFunctionSequence;
 
-	bool mfirstModeState[AC_NUM_OF_ACTIONS];
+	bool mFirstAction[AC_NUM_OF_ACTIONS];
 	bool isShooting = false;
 
 	Vec3 AttackStartPoint;
 	bool newAttackModeDone = false;
-	bool coordinateTheAttack = false;
+	bool startTheAttack = false;
 	bool arrivedAtStartPoint = false;
-	bool waitingToAttack = false;
 	float attack_start_timer = 0.0;
 	float wait_attack_timer = 0.0;
 	int prev_attack_start_timer = 0;
@@ -398,6 +403,10 @@ private:
 	float attack_expired_timer = 0.0;
 
 	float aim_expired_timer = 0.0;
+	float currFrame = 0.0;
+	float initFrameTime = 0.0;
+	float stopFrameTime = 0.0;
+	float mFrameTime;
 
 	float mTime;
 	float mEnemyDistance;
@@ -422,21 +431,24 @@ private:
 	float s_05, s_1, s_2;
 	float sp_1, sp_2;
 	float x10;
-	float x15;
-	float x25;
-	float x45;
+	float x20;
+	float x30;
+	float x40;
+	float x50;
 	float x75;
 	float x125;
 	float s1_d = 0.0;
 	float stepAngle;
 	float stepAngle_off;
 	int oddX = 0;
+	float sinValueAlertZ = 0.0;
+	float sinValueAlertX = 0.0;
+	float sinValueDead = 0.0;
 
-	Vector<int> BoneId;
-	Vector<quat> BoneRot;
-	Vector<quat> initQuat;
-	Vector<vec3> newInitPosBone;
-	Vector<vec3> initPosBone;
+
+	Vector<int>  BoneId;
+	Vector<quat> initBoneRot;
+	Vector<vec3> initBonePos;
 	Vector<vec3> initScale;
 
 	int numOfBones = 0;
@@ -448,24 +460,27 @@ private:
 	vec3 spineRotV = vec3_zero;
 	quat spineRot = quat_identity;
 	float rotateRate = 0.0;
+
 	Vec3 movingInc = Vec3_zero;
 	float tMovingSpeed = 0.0;
 	float mMovingSpeed = 0.0;
 	int prevSmartLevel = -1;
 
 	float forwardMove = 0;
+	bool move_status = true;
+	float tempMovingSpeed = 0.0;
 
 	vec3 tPos;
-	quat currRot;
 	quat tRot;
 
 	quat jointRot[NO_OF_ROTS][PF_NUM_OF_PROFILES][4];
 	vec3 jointRot1[NO_OF_ROTS][PF_NUM_OF_PROFILES][4];
 	vec3 boneRot[NUM_OF_BONES];
 
-	float sinValueDead = 0.0;
 	int mProfile = PF_TPOSE;
-	int mPrevProfile = PF_TPOSE;
+	int mPrevProfile = PF_PRONNING;
+	int  nextProfile = 0;
+	char tempProfile = PF_PRONNING;
 	bool deadTransition = false;
 	bool shootingOk = false;
 
@@ -475,24 +490,24 @@ private:
 	bool reloadStatus = false;
 	bool reload2Status = false;
 	bool triggerPull = false;
+
 	float reloadTimer = 0.0;
 	float reloadWaitTime = 0.5;
+	float transitionTimer = 5.0;
 	bool reloadWait = false;
 	int reloadSeq = 0;
 
 	float modeTimer[AC_NUM_OF_ACTIONS];
 	float shootTimer2 = 0.0;
 	vec3  aimingDirection = vec3_zero;
-	float sinValueAlertZ = 0.0;
-	float sinValueAlertX = 0.0;
 	bool  alertOn = false;
 	Vec3  mAttackPoint;
-	int  nextProfile = 0;
-	bool move_status = true;
-	float tempMovingSpeed = 0.0;
 	bool weaponOnTarget = false;
 	bool find_the_path = false;
 	bool avoid_the_obstacles = false;
+	bool mFreeze = false;
+
+
 
 	void setNumOfMagazines(int num) {
 		mMagazineCount = num;
@@ -533,9 +548,9 @@ private:
 	void setMoveStatus(bool status) {
 		move_status = status;
 	}
-	void setSmartLevel(int ) {
-
-	}
+	void setSmartLevel(int sl) {
+		smartLevel = sl;
+	}	
 
 	void changeProfile(int newProfile);
 	void changeProfile(int newProfile, float speed);
@@ -544,23 +559,17 @@ private:
 		shutdown();
 	}
 
-	float transitionTimer = 5.0;
 
-	void initBonesAndAll();
 	void setProfileStanding1(int profile, int bone_num);
 	void setProfileStanding2(int profile, int bone_num);
 	void setProfileCrouching(int profile, int bone_num);
 	void setProfilePronning(int profile, int bone_num);
 	void setProfileDying(int profile, int bone_num);
 	void setFingers(int bone_num);
+
 	void resetBones();
 	void updateBones();
-	void initEyePoint();
-	void getBonesInitTransform();
-	void initActiveBones();
-
-	void setBoneRotInit();
-
+	
 	void updateAvatarRot();
 	void updatePosition();
 	void updateShooting();
@@ -571,15 +580,13 @@ private:
 	void updateMovement();
 	void updateFingerAngles();
 	void updateMovingSpeed();
+	void updateAnimation(int bone_num);
 
 	void setHeadRotation(Vec3 rot);
 	void setSpineRotation(Vec3 rot);
 	void setSinWaves();
-	quat OptitrackToBoneRot(quat rot);
-	void Animate(ObjectMeshSkinnedPtr& skin, int bone_num);
 	void setSpineRotation(int bone_num);
 	void setHeadRotation(int bone_num);
-	void setBoneRotation(ObjectMeshSkinnedPtr& skin, int bone_num);
 	void setUp(float& x, float target, float rate);
 	void setRifle(int profile,bool aiming);
 	void setReload(int profile,bool reload);
@@ -594,10 +601,16 @@ private:
 	void generateSinWavesPronning();
 	void generateSinWavesDying();
 	void processClient();
+	void processClientTest();
 	void sendData();
+	void sendDataTest();
 
 	void setAlertSpine(bool on, float speed);
 	void setAlertHead(bool on, float speed);
 	void setAlerts();
-	int getProfileType(int profile);
+	int  getProfileType(int profile);
+
+	void InitAnimFile();
+	void playAnimFile();
+
 };

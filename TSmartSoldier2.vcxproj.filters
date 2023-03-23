@@ -86,6 +86,9 @@
     <ClCompile Include="TSMSoldier\TSMSoldierFingers.cpp">
       <Filter>TSMSoldier</Filter>
     </ClCompile>
+    <ClCompile Include="TSMSoldier\TSMSoldier7.cpp">
+      <Filter>TSMSoldier</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppEditorLogic.h" />

@@ -2,20 +2,38 @@
 #include "SynckerInterface.h"
 #include "Utils.h"
 
-
-void TSMSoldier::setupPatrolLogics() {
-
+//-------------------------------------------------------------------------------
+void TSMSoldier::resetBones() {
+	mat4 transform;
+	int boneId;
+	for (int i = 0; i < gNumOfActiveBones + numOfFingerBonesIncluded; i++) {
+		boneId = BoneId[i];
+		composeTransform(transform, initBonePos[boneId], initBoneRot[boneId], initScale[boneId]);
+		mAvatar->setBoneTransformWithChildren(boneId, transform);
+	}
 }
-
-void TSMSoldier::setupPatrolRoute() {
-
+//-----------------------------------------------------------------------------
+void  TSMSoldier::updateBones() {
+	resetBones();
+	if (Input::isKeyPressed(Input::KEY_T))
+		return;
+	mat4 transform;
+	int boneId;
+	for (int i = gNumOfActiveBones - 1 + numOfFingerBonesIncluded; i >= 0; i--) {
+		tRot = quat_identity;
+		tPos = vec3_zero;
+		boneId = BoneId[i];
+		updateAnimation(boneId);
+		composeTransform(transform, initBonePos[boneId] + tPos, initBoneRot[boneId] * tRot, initScale[boneId]);
+		mAvatar->setBoneTransformWithChildren(boneId, transform);
+	}
+	boneHeight = mAvatar->getBoneWorldTransform(SMS_Hips).getColumn3(3).z;
 }
-
 
 void TSMSoldier::changeAction(int newAction) {
 	if (prev_action_Mode == newAction || inTransition)
 		return;
-	mfirstModeState[newAction] = true;
+	mFirstAction[newAction] = true;
 	modeTimer[newAction] = 0.0;
 	find_the_enemy = true;
 	isDead = 0;
@@ -40,6 +58,7 @@ void TSMSoldier::changeAction(int newAction) {
 
 	prev_action_Mode = action_Mode;
 	action_Mode = newAction;
+	mCurAction = action_Mode;
 }
 
 
